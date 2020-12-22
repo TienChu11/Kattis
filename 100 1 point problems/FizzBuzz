@@ -1,0 +1,31 @@
+using System;
+using System.Collections;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            int[] arr = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
+            for (int i = 1; i < arr[2] + 1; i++) {
+                if (i % arr[0] == 0)
+                {
+                    if (i % arr[1] == 0) Console.WriteLine("FizzBuzz");
+                    else Console.WriteLine("Fizz");
+                }
+                else if (i % arr[1] == 0)
+                {
+                    Console.WriteLine("Buzz");
+                }
+                else Console.WriteLine(i);
+
+            }
+
+        }
+
+        
+    }
+}

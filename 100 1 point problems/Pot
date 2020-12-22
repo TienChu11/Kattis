@@ -1,0 +1,25 @@
+using System;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            int sum = 0;
+            int numOfLines = Convert.ToInt32(Console.ReadLine());
+            int nextNum = 0;
+            string line;
+
+            while((line = Console.ReadLine()) != null){ 
+                nextNum = Convert.ToInt32(line);
+                sum += Convert.ToInt32(Math.Pow(nextNum / 10, nextNum % 10));
+            }
+
+            Console.WriteLine(sum);
+
+        }
+    }
+}

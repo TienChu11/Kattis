@@ -1,0 +1,25 @@
+using System;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Int64 iteration = Convert.ToInt64(Console.ReadLine());
+            Int64 sides = 4;
+            Int64 points = 4;
+            Int64 square = 1;
+            for(int i = 1; i <= iteration; i++) {
+                points += sides + square;
+                sides = Convert.ToInt64((Math.Sqrt(points) - 1) * Math.Sqrt(points) * 2);
+                square = Convert.ToInt64(Math.Pow(4, i));
+            }
+
+            Console.WriteLine(points);
+
+        }
+    }
+}

@@ -1,0 +1,24 @@
+using System;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            int numOfYears = Convert.ToInt32(Console.ReadLine());
+            string[] input;
+            string line;
+            double QALY = 0;
+            for (int i = 1; i <= numOfYears; i++) {
+                line = Console.ReadLine();
+                input = line.Split(' ');
+                QALY += (Convert.ToDouble(input[0]) * Convert.ToDouble(input[1]));
+            }
+
+            Console.WriteLine(QALY);
+
+        }
+    }
+}

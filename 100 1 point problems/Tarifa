@@ -1,0 +1,41 @@
+using System;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+
+            
+            int limit = Convert.ToInt32(Console.ReadLine());
+            int numOfMonths = Convert.ToInt32(Console.ReadLine());
+            string line;
+            int excess = 0;
+            while ((line = Console.ReadLine()) != null)
+            {
+                int consume = Convert.ToInt32(line);
+                excess += limit - consume;
+            }
+            Console.Write((excess + limit));
+        }
+
+        static void Yes() {
+            string[] text = System.IO.File.ReadAllLines(@"C:\Users\TienChuPC\source\repos\KattisCsharp\TextFile1.txt");
+            Console.WriteLine(text);
+
+            int limit = Convert.ToInt32(text[0]);
+            int numOfMonths = Convert.ToInt32(text[1]);
+
+            int excess = limit;
+            for (int i = 2; i < text.Length; i++)
+            {
+                int consume = Convert.ToInt32(text[i]);
+                excess += limit - consume;
+            }
+
+            Console.WriteLine(excess);
+        }
+    }
+}

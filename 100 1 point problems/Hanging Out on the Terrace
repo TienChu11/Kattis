@@ -1,0 +1,36 @@
+using System;
+using System.Collections;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            int[] input = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
+            int occupancy = 0;
+            int denied = 0;
+            for (int i = 0; i < input[1]; i++) { 
+                string[] events = Console.ReadLine().Split(' ');
+                if (events[0].Equals("enter"))
+                {
+                    int people = Convert.ToInt32(events[1]);
+                    if (occupancy + people > input[0])
+                    {
+                        denied++;
+                    }
+                    else {
+                        occupancy += people;
+                    }
+                }
+                else occupancy -= Convert.ToInt32(events[1]);
+            }
+            Console.WriteLine(denied);
+
+        }
+
+        
+    }
+}

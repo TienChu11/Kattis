@@ -1,0 +1,43 @@
+using System;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            int T = Convert.ToInt32(Console.ReadLine());
+            string[] cities;
+            int indexCount = 0;
+            string nextCity;
+            for (int i = 1; i <= T; i++) {
+                cities = new string[100];
+                indexCount = 0;
+                int numOfCities = Convert.ToInt32(Console.ReadLine());
+
+                for (int j = 1; j <= numOfCities; j++) {
+                    nextCity = Console.ReadLine();
+                    bool hasCity = false;
+                    for (int k = 0; k < indexCount; k++) {
+
+                        if (cities[k].Equals(nextCity))
+                        {
+                            hasCity = true;
+                            
+                        }
+                    }
+                    if (!hasCity) {
+                        cities[indexCount] = nextCity;
+                        indexCount++;
+                    }
+                        
+                }
+                Console.WriteLine(indexCount);
+            }
+            
+
+        }
+    }
+}

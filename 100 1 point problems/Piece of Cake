@@ -1,0 +1,23 @@
+using System;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+
+            int n, h, v;
+            int[] input = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
+            n = input[0];
+            h = input[1];
+            v = input[2];
+            int result = Math.Max(h, n - h) * Math.Max(v, n - v);
+            Console.WriteLine(result * 4);
+
+
+        }
+    }
+}

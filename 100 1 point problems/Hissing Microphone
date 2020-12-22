@@ -1,0 +1,18 @@
+using System;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // -----------------------------
+
+            string input = Console.ReadLine();
+            input = input.Contains("ss") ? "hiss" : "no hiss";
+            Console.WriteLine(input);
+
+        }
+    }
+}

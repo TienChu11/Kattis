@@ -1,0 +1,36 @@
+using System;
+
+namespace Hello_World
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] answer = {1, 0, 0};
+            string instruction = Console.ReadLine();
+            foreach (char i in instruction) {
+                if (i == 'A')
+                {
+                    int temp = answer[0];
+                    answer[0] = answer[1];
+                    answer[1] = temp;
+                }
+                else if (i == 'B')
+                {
+                    int temp = answer[1];
+                    answer[1] = answer[2];
+                    answer[2] = temp;
+                }// 'C'
+                else {
+                    int temp = answer[0];
+                    answer[0] = answer[2];
+                    answer[2] = temp;
+                }
+            }
+
+            for (int i = 1; i <= answer.Length; i++) {
+                if (answer[i - 1] == 1) Console.WriteLine(i);
+            }
+        }
+    }
+}

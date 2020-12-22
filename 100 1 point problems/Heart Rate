@@ -1,0 +1,24 @@
+using System;
+using System.Diagnostics;
+
+namespace KattisCsharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int numOfCases = Convert.ToInt32(Console.ReadLine());
+            for (int i = 1; i <= numOfCases; i++) {
+                decimal[] input = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToDecimal(x));
+                decimal bpm = Decimal.Round(60.0000M / input[1] * input[0], 4, MidpointRounding.ToEven);
+                decimal variance = Decimal.Round(60.0000M / input[1], 4, MidpointRounding.ToEven);
+                decimal upper = Decimal.Round(bpm + variance, 4, MidpointRounding.ToEven);
+                decimal below = Decimal.Round(bpm - variance, 4, MidpointRounding.ToEven);
+                Console.WriteLine("{0:0.0000} {1:0.0000} {2:0.0000}", below, bpm, upper);
+            }
+
+        }
+
+        
+    }
+}
