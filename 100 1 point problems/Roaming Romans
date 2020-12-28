@@ -91,6 +91,7 @@ class Main extends PrintWriter {
 
 
     public static void main(String[] args) {
+
         Main sc = null;
         try{
             //sc = new Main(new FileInputStream(new File("./src/" + "in")), System.out);
@@ -101,17 +102,8 @@ class Main extends PrintWriter {
             System.out.println(e);
         }
 
-        int G = sc.getInt(), S = sc.getInt(), C = sc.getInt();
-        int sum = G * 3 + S * 2 + C * 1;
-        String result = "";
-        if(sum >= 6) result += "Gold";
-        else if(sum >= 3) result += "Silver";
-        else result += "Copper";
-
-        if(sum >= 8) result = "Province or " + result;
-        else if(sum >= 5) result = "Duchy or " + result;
-        else if(sum >= 2) result = "Estate or " + result;
-
+        double input = sc.getDouble();
+        int result = (int) Math.round(input * 1000 * 5280 / 4854);
         sc.println(result);
 
         sc.flush();
