@@ -93,6 +93,7 @@ class Main extends PrintWriter {
 
     public static void main(String[] args) {
 
+        // initialize scanner
         Main sc = null;
         try{
             //sc = new Main(new FileInputStream(new File("./src/" + "in")), System.out);
