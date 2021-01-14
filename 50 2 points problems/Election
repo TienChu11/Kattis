@@ -1,0 +1,151 @@
+/** Simple yet moderately fast I/O routines.
+ *
+ * Example usage:
+ *
+ * Kattio io = new Kattio(System.in, System.out);
+ *
+ * while (io.hasMoreTokens()) {
+ *    int n = io.getInt();
+ *    double d = io.getDouble();
+ *    double ans = d*n;
+ *
+ *    io.println("Answer: " + ans);
+ * }
+ *
+ * io.close();
+ *
+ *
+ * Some notes:
+ *
+ * - When done, you should always do io.close() or io.flush() on the
+ *   Kattio-instance, otherwise, you may lose output.
+ *
+ * - The getInt(), getDouble(), and getLong() methods will throw an
+ *   exception if there is no more data in the input, so it is generally
+ *   a good idea to use hasMoreTokens() to check for end-of-file.
+ *
+ * @author: Kattis
+ */
+
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+
+class Main extends PrintWriter {
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+
+    public static void main(String[] args) {
+
+        Scanner sc = null;
+        try{
+            //sc = new Main(new FileInputStream(new File("./src/" + "in")), System.out);
+            //sc = new Main(System.in, System.out);
+            //sc = new Scanner(new File("./src/in"));
+            sc = new Scanner(System.in);
+        }catch (Exception e){ System.out.println(e); }
+
+        int n = Integer.parseInt(sc.nextLine());
+        Map<String, String> canToParty = new TreeMap<>();
+        Map<String, Integer> canVotes = new TreeMap<>();
+        for (int i = 0; i < n; i++) {
+            String canName = sc.nextLine();
+            String party = sc.nextLine();
+
+            // the candidate doesn't associate with any party
+            if(party.equals("independent")){
+                canToParty.put(canName, canName);
+                continue;
+            }
+
+            canToParty.put(canName, party);
+        }
+
+        int m = Integer.parseInt(sc.nextLine());
+        String canName = "";
+        for (int i = 0; i < m; i++) {
+            canName = sc.nextLine();
+            if(!canVotes.containsKey(canName)) {
+                canVotes.put(canName, 1);
+                continue;
+            }
+            canVotes.put(canName, canVotes.get(canName) + 1);
+        }
+
+        String bestCan = canName;
+        for(Map.Entry<String, Integer> entry : canVotes.entrySet()){
+            if(entry.getValue() > canVotes.get(bestCan)) bestCan = entry.getKey();
+        }
+
+        // check if there's a second candidate who has same vote
+        boolean hasTie = false;
+        for(Map.Entry<String, Integer> entry : canVotes.entrySet()){
+            if(entry.getValue() == canVotes.get(bestCan) && !entry.getKey().equals(bestCan)) hasTie = true;
+        }
+
+        if(hasTie){
+            System.out.println("tie");
+        }else if(bestCan.equals(canToParty.get(bestCan))){
+            System.out.println("independent");
+        }else{
+            System.out.println(canToParty.get(bestCan));
+        }
+
+    }
+}
