@@ -1,0 +1,154 @@
+/** Simple yet moderately fast I/O routines.
+ *
+ * Example usage:
+ *
+ * Kattio io = new Kattio(System.in, System.out);
+ *
+ * while (io.hasMoreTokens()) {
+ *    int n = io.getInt();
+ *    double d = io.getDouble();
+ *    double ans = d*n;
+ *
+ *    io.println("Answer: " + ans);
+ * }
+ *
+ * io.close();
+ *
+ *
+ * Some notes:
+ *
+ * - When done, you should always do io.close() or io.flush() on the
+ *   Kattio-instance, otherwise, you may lose output.
+ *
+ * - The getInt(), getDouble(), and getLong() methods will throw an
+ *   exception if there is no more data in the input, so it is generally
+ *   a good idea to use hasMoreTokens() to check for end-of-file.
+ *
+ * @author: Kattis
+ */
+
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+
+class Main extends PrintWriter {
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+
+    public static void main(String[] args) {
+
+        Scanner sc = null;
+        try{
+            sc = new Scanner(System.in);
+        }catch (Exception e){ System.out.println(e); }
+
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        Map<String, Integer> map = new TreeMap<>();
+        while (sc.hasNextLine()){
+            String line = sc.nextLine();
+            if(line.equals("0")) break;
+
+            int sum = 0;
+            String[] tokens = line.split(" . ");
+
+            if(line.contains("=")){
+                map.put(tokens[0], Integer.parseInt(tokens[1]));
+                continue;
+            }
+
+            String[] variablesArray = new String[100];
+            int varArrCounter = 0;
+            for (int i = 0; i < tokens.length; i++) {
+                String nextToken = tokens[i];
+                if(alphabet.contains("" + nextToken.charAt(0))){// this token is a variable
+                    if(map.containsKey(nextToken)){
+                        sum += map.get(nextToken);
+                    }else {
+                        variablesArray[varArrCounter] = nextToken;
+
+                        varArrCounter++;
+                    }
+                }else {// this token is a number
+                    sum += Integer.parseInt(nextToken);
+                }
+            }
+
+            StringBuilder output = new StringBuilder();
+            if(sum > 0 && varArrCounter == 0){
+                output.append(sum);
+            }
+
+            if(sum > 0 && varArrCounter > 0){
+                output.append(sum);
+                for (int i = 0; i < varArrCounter; i++) {
+                    output.append(" + " + variablesArray[i]);
+                }
+            }
+
+            if(sum == 0 && varArrCounter > 0){
+                output.append(variablesArray[0]);
+                for (int i = 1; i < varArrCounter; i++) {
+                    output.append(" + " + variablesArray[i]);
+                }
+            }
+
+            System.out.println(output.toString());
+        }
+    }
+}
