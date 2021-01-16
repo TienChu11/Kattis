@@ -1,0 +1,186 @@
+/** Simple yet moderately fast I/O routines.
+ *
+ * Example usage:
+ *
+ * Kattio io = new Kattio(System.in, System.out);
+ *
+ * while (io.hasMoreTokens()) {
+ *    int n = io.getInt();
+ *    double d = io.getDouble();
+ *    double ans = d*n;
+ *
+ *    io.println("Answer: " + ans);
+ * }
+ *
+ * io.close();
+ *
+ *
+ * Some notes:
+ *
+ * - When done, you should always do io.close() or io.flush() on the
+ *   Kattio-instance, otherwise, you may lose output.
+ *
+ * - The getInt(), getDouble(), and getLong() methods will throw an
+ *   exception if there is no more data in the input, so it is generally
+ *   a good idea to use hasMoreTokens() to check for end-of-file.
+ *
+ * @author: Kattis
+ */
+
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+
+class Main extends PrintWriter {
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        String[] operations = {"a", "r", "m", "d"};
+        String[] operationSeries = new String[64];
+        Map<Integer, Boolean> exist = new TreeMap<>();
+        Map<Integer, Integer> valueToCounter = new TreeMap<>();
+        int counter = 0;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    operationSeries[counter] = operations[i] + operations[j] + operations[k];
+                    int value = getValue(operationSeries[counter]);
+                    exist.put(value, true);
+                    valueToCounter.put(value, counter);
+                    counter++;
+                }
+            }
+        }
+
+        int m = sc.getInt();
+        for (int i = 0; i < m; i++) {
+            int n = sc.getInt();
+            if(exist.containsKey(n)){
+                    sc.println(opsToString(operationSeries[valueToCounter.get(n)], n));
+            }else {
+                sc.println("no solution");
+            }
+        }
+        sc.flush();
+
+    }
+
+    public static int getValue(String operations){
+        int[] array = {4, 4, 4, 4};
+        int indexOffset = 0;
+        for (int i = 0; i < operations.length(); i++) {
+            switch (operations.charAt(i)){
+                case 'm':
+                    array[i+1] = array[i] * array[i+1];
+                    array[i] = 1000000;
+                    break;
+
+                case 'd':
+                    array[i+1] = array[i] / array[i+1];
+                    array[i] = 1000000;
+                    break;
+
+                default:
+                    int a = 0;
+            }
+        }
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        for(int x : array){
+            if(x != 1000000) arrayList.add(x);
+        }
+        operations = operations.replaceAll("[md]", "");
+        for (int i = 0; i < operations.length(); i++) {
+            switch (operations.charAt(i)){
+                case 'a':
+                    arrayList.set(i+1, arrayList.get(i) + arrayList.get(i+1));
+                    break;
+
+                case 'r':
+                    arrayList.set(i+1, arrayList.get(i) - arrayList.get(i+1));
+                    break;
+                default:
+                    int a = 0;//never used
+            }
+        }
+
+        return arrayList.get(arrayList.size() - 1);
+    }
+
+    public static String opsToString(String ops, int result){
+        StringBuilder string = new StringBuilder();
+        string.append("4");
+        for (int i = 0; i < 3; i++) {
+            if(ops.charAt(i) == 'a') string.append(" + 4");
+            else if(ops.charAt(i) == 'r') string.append(" - 4");
+            else if(ops.charAt(i) == 'm') string.append(" * 4");
+            else if(ops.charAt(i) == 'd') string.append(" / 4");
+        }
+
+        string.append(" = " + result);
+        return string.toString();
+    }
+}
