@@ -1,0 +1,145 @@
+/** Simple yet moderately fast I/O routines.
+ *
+ * Example usage:
+ *
+ * Kattio io = new Kattio(System.in, System.out);
+ *
+ * while (io.hasMoreTokens()) {
+ *    int n = io.getInt();
+ *    double d = io.getDouble();
+ *    double ans = d*n;
+ *
+ *    io.println("Answer: " + ans);
+ * }
+ *
+ * io.close();
+ *
+ *
+ * Some notes:
+ *
+ * - When done, you should always do io.close() or io.flush() on the
+ *   Kattio-instance, otherwise, you may lose output.
+ *
+ * - The getInt(), getDouble(), and getLong() methods will throw an
+ *   exception if there is no more data in the input, so it is generally
+ *   a good idea to use hasMoreTokens() to check for end-of-file.
+ *
+ * @author: Kattis
+ */
+
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+
+class Main extends PrintWriter {
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        int x = sc.getInt();
+        int y = sc.getInt();
+
+        while (x != 0 || y != 0){
+            int[] everyOfX = new int[10];
+            int[] everyOfY = new int[10];
+
+            int counterX = 0;
+            while (x != 0){
+                everyOfX[counterX] = x % 10;
+                counterX++;
+                x /= 10;
+            }
+
+            int counterY = 0;
+            while (y != 0){
+                everyOfY[counterY] = y % 10;
+                counterY++;
+                y /= 10;
+            }
+
+            int numCarry = 0;
+            int carry = 0;
+            for (int i = 0; i < 10; i++) {
+                int sum = everyOfX[i] + everyOfY[i] + carry;
+
+                numCarry += sum >= 10 ? 1 : 0;
+                carry = sum / 10;
+            }
+
+            if(numCarry == 0){
+                sc.println("no carry operation.");
+            }else if(numCarry == 1){
+                sc.println(numCarry + " carry operation.");
+            }else {
+                sc.println(numCarry + " carry operations.");
+            }
+            x = sc.getInt();
+            y = sc.getInt();
+        }
+
+        sc.flush();
+
+    }
+}
