@@ -1,0 +1,94 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+import static java.lang.Math.*;
+
+class Main extends PrintWriter{
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        int testCases = sc.getInt();
+
+        for (int i = 0; i < testCases; i++) {
+            long sum = 0;
+            long n = sc.getLong();
+            for (int j = 0; j < n; j++) {
+                double x = sc.getDouble();
+                double y = sc.getDouble();
+
+                double distance = sqrt(pow(x, 2) + pow(y, 2));
+                if(distance > 200) continue;
+                int points = (int) (11 - (distance / 20));
+
+                points = points > 10 ? 10 : points;
+
+                sum += points;
+            }
+            sc.println(sum);
+        }
+        sc.flush();
+
+    }
+}
