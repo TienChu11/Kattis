@@ -1,0 +1,112 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+import static java.lang.Math.*;
+
+class Main extends PrintWriter{
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        Set<Integer> set = new TreeSet<>();
+        int n = sc.getInt();
+        for (int i = 0; i < n; i++) {
+            set.add(sc.getInt());
+        }
+
+        Iterator<Integer> iterator = set.iterator();
+
+        int cur = iterator.next();
+        int fakeCur = cur;
+        int count = 1;
+
+        while (iterator.hasNext()){
+            int next = iterator.next();
+            if(next == fakeCur + 1){
+                fakeCur++;
+                count++;
+            }else {
+                if(count > 2){
+                    sc.print(cur + "-" + fakeCur + " ");
+                }else if(count == 2){
+                    sc.print(cur + " " + fakeCur + " ");
+                }else {
+                    sc.print(cur + " ");
+                }
+
+                cur = next;
+                count = 1;
+                fakeCur = cur;
+            }
+        }
+
+        if(count == 1) sc.print(cur);
+        if(count == 2) sc.print(cur + " " + fakeCur);
+        if(count > 2) sc.print(cur + "-" + fakeCur);
+
+        sc.flush();
+
+
+    }
+}
