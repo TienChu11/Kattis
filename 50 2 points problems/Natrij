@@ -1,0 +1,113 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+import static java.lang.Math.*;
+
+class Main extends PrintWriter{
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        String startTime = sc.getWord();
+        String endTime = sc.getWord();
+
+        String[] startArr = startTime.split(":");
+        String[] endArr = endTime.split(":");
+
+        int s = (Integer.parseInt(startArr[0]) * 60 * 60)
+                + (Integer.parseInt(startArr[1]) * 60)
+                + Integer.parseInt(startArr[2]);
+        int e = (Integer.parseInt(endArr[0]) * 60 * 60)
+                + (Integer.parseInt(endArr[1]) * 60)
+                + Integer.parseInt(endArr[2]);
+
+        if(e > s){
+            int result = e - s;
+            sc.println(parseToTime(result));
+        }else if(e < s){
+            int total = 86400;
+            int result = total - s;
+            result += e;
+            sc.println(parseToTime(result));
+        }else {
+            sc.println("24:00:00");
+        }
+
+        sc.flush();
+
+
+    }
+
+
+    public static String parseToTime(int time){
+        int hours = time / 60 / 60;
+        int minutes = (time / 60) - (hours * 60);
+        int seconds = time % 60;
+
+        String a = hours < 10 ? "0" + hours : "" + hours;
+        String b = minutes < 10 ? "0" + minutes : "" + minutes;
+        String c = seconds < 10 ? "0" + seconds : "" + seconds;
+        return a + ":" + b + ":" + c;
+    }
+}
