@@ -1,0 +1,134 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+import static java.lang.Math.*;
+
+public class Main extends PrintWriter{
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        int cases = sc.getInt();
+        for (int i = 0; i < cases; i++) {
+            int prizes = sc.getInt();
+            int stamps = sc.getInt();
+            long theSum = 0;
+
+            // each type of stamp's requirement
+            ArrayList<Integer[]> stampsRequires = new ArrayList<>();
+            stampsRequires.ensureCapacity(prizes);
+
+            // each type of stamp's value
+            ArrayList<Integer> values = new ArrayList<>();
+            values.ensureCapacity(prizes);
+
+            for (int j = 0; j < prizes; j++) {
+                int numOfStamps = sc.getInt();
+
+                // put each type's requires in
+                Integer[] thisArr = new Integer[numOfStamps];
+                stampsRequires.add(thisArr);
+
+                for (int k = 0; k < numOfStamps; k++) {
+                    thisArr[k] = sc.getInt();
+                }
+
+                // put each type's value in
+                values.add(sc.getInt());
+            }
+
+            // all types amounts
+            Integer[] stampsAmounts = new Integer[stamps];
+            for (int j = 0; j < stamps; j++) {
+                stampsAmounts[j] = sc.getInt();
+            }
+
+            // calculate minimum of all required stamp of each prizes
+            for (int j = 0; j < stampsRequires.size(); j++) {
+                Integer[] array = stampsRequires.get(j);
+
+                // ex: first stamp in array is type 1 - this has index 0 in stamp amount
+                // so to get it we need : stampAmounts[array[0] - 1]
+                int min = stampsAmounts[array[0] - 1];
+                for (int k = 0; k < array.length; k++) {
+                    min = min(stampsAmounts[array[k] - 1], min);
+                }
+
+                // reduce the stamps amount
+                for (int k = 0; k < array.length; k++) {
+                    stampsAmounts[array[k] - 1] -= min;
+                }
+
+                // add to sum
+                theSum += values.get(j) * min;
+            }
+
+            sc.println(theSum);
+        }
+
+        sc.flush();
+
+
+    }
+}
