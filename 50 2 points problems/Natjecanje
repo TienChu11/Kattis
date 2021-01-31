@@ -1,0 +1,129 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+import static java.lang.Math.*;
+
+public class Main extends PrintWriter{
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        int N = sc.getInt();
+        int S = sc.getInt();
+        int R = sc.getInt();
+
+        boolean[] teamWithDamage = new boolean[N];
+        boolean[] teamWithReserve = new boolean[N];
+
+        for (int i = 0; i < S; i++) { // all teams with damaged kayak
+            int index = sc.getInt();
+            teamWithDamage[index - 1] = true;
+        }
+
+        for (int i = 0; i < R; i++) { // all teams with reserved kayak
+            int index = sc.getInt();
+            teamWithReserve[index - 1] = true;
+        }
+
+        // fix with own kayak
+        for (int i = 0; i < teamWithDamage.length; i++) {
+            if(teamWithDamage[i] && teamWithReserve[i]){
+                teamWithDamage[i] = false;
+                teamWithReserve[i] = false;
+            }
+        }
+
+        // fix with adjacent team's kayak
+        if(teamWithDamage[0] && teamWithReserve[1]){ // fix the first team
+            teamWithDamage[0] = false;
+            teamWithReserve[1] = false;
+        }
+
+        if(teamWithDamage[teamWithDamage.length-1] && teamWithReserve[teamWithReserve.length-2]){ // fix the last team
+            teamWithDamage[teamWithDamage.length-1] = false;
+            teamWithReserve[teamWithReserve.length-2] = false;
+        }
+
+        for (int i = 1; i < teamWithDamage.length - 1; i++) {
+            if(teamWithDamage[i]){
+
+                if(teamWithReserve[i-1]){
+                    teamWithDamage[i] = false;
+                    teamWithReserve[i-1] = false;
+                }else if(teamWithReserve[i+1]){
+                    teamWithDamage[i] = false;
+                    teamWithReserve[i+1] = false;
+                }
+
+            }
+        }
+
+        int count = 0;
+        for (int i = 0; i < teamWithDamage.length; i++) {
+            if(teamWithDamage[i]) count++;
+        }
+
+        sc.println(count);
+        sc.flush();
+    }
+}
