@@ -1,0 +1,166 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.util.stream.IntStream;
+import static java.lang.Math.*;
+
+public class Main extends PrintWriter{
+    public Main(InputStream i) {
+        super(new BufferedOutputStream(System.out));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+    public Main(InputStream i, OutputStream o) {
+        super(new BufferedOutputStream(o));
+        r = new BufferedReader(new InputStreamReader(i));
+    }
+
+    public boolean hasMoreTokens() {
+        return peekToken() != null;
+    }
+
+    public int getInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    public double getDouble() {
+        return Double.parseDouble(nextToken());
+    }
+
+    public long getLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    public String getWord() {
+        return nextToken();
+    }
+
+
+
+    private BufferedReader r;
+    private String line;
+    private StringTokenizer st;
+    private String token;
+
+    private String peekToken() {
+        if (token == null)
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    line = r.readLine();
+                    if (line == null) return null;
+                    st = new StringTokenizer(line);
+                }
+                token = st.nextToken();
+            } catch (IOException e) { }
+        return token;
+    }
+
+    private String nextToken() {
+        String ans = peekToken();
+        token = null;
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+        Main sc = null;
+        try{
+            sc = new Main(System.in, System.out);
+        }catch (Exception e){ System.out.println(e); }
+
+        int N = sc.getInt();
+        int t = sc.getInt();
+
+        if(t == 1){
+            boolean[] check = new boolean[7778];
+            boolean hasIt = false;
+
+            for (int i = 0; i < N; i++) {
+                int next = sc.getInt();
+                if(next > 7777) continue;
+
+                if(check[7777 - next]) {
+                    hasIt = true;
+                    break;
+                }
+                else check[next] = true;
+            }
+
+            if(hasIt) sc.println("Yes");
+            else sc.println("No");
+        }else if(t == 2){
+            Set<Integer> set = new HashSet<>();
+            boolean unique = true;
+
+            for (int i = 0; i < N; i++) {
+                int next = sc.getInt();
+
+                if(set.contains(next)){
+                    unique = false;
+                    break;
+                }else{
+                    set.add(next);
+                }
+            }
+
+            if(unique) sc.println("Unique");
+            else sc.println("Contains duplicate");
+        }else if(t == 3){
+            Map<Integer, Integer> map = new HashMap<>();
+            boolean hasIt = false;
+            int theNumber = 0;
+
+            for (int i = 0; i < N; i++) {
+                int next = sc.getInt();
+
+                if(!map.containsKey(next)) map.put(next, 0);
+                map.put(next, map.get(next) + 1);
+            }
+
+            for(Map.Entry<Integer, Integer> entry : map.entrySet()){
+                if(entry.getValue() > (N / 2)) {
+                    hasIt = true;
+                    theNumber = entry.getKey();
+                    break;
+                }
+            }
+
+            if(hasIt) sc.println(theNumber);
+            else sc.println(-1);
+        }else if(t == 4){
+            ArrayList<Integer> array = new ArrayList<>(N);
+
+            for (int i = 0; i < N; i++) {
+                array.add(sc.getInt());
+            }
+
+            Collections.sort(array);
+
+            if(array.size() % 2 == 0){//even
+                int index = array.size() / 2;
+                sc.println(array.get(index-1) + " " + array.get(index));
+            }else{//odd
+                int index = array.size() / 2;
+                sc.println(array.get(index));
+            }
+        }else if(t == 5){
+            ArrayList<Integer> arrayList = new ArrayList<>(N);
+
+            for (int i = 0; i < N; i++) {
+                arrayList.add(sc.getInt());
+            }
+
+            Collections.sort(arrayList);
+
+            for (int i = 0; i < arrayList.size(); i++) {
+                int theNumber = arrayList.get(i);
+                if(theNumber >= 100 && theNumber <= 999) sc.print(theNumber + " ");
+            }
+        }
+
+        sc.flush();
+
+
+    }
+}
